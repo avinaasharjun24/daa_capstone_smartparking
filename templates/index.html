@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>Smart Parking System</title>
+    <style>
+        body { 
+            padding: 20px; 
+        }
+        .form-group {
+            width: 200px; /* Adjust the width as needed */
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1 class="text-center">Smart Parking System</h1>
+    <form method="POST" action="/park">
+        <div class="form-group">
+            <input type="text" name="vehicle_number" class="form-control" placeholder="Enter Vehicle Number" required>
+        </div>
+        <button type="submit" class="btn btn-success">Park Vehicle</button>
+    </form>
+    
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class="list-group mt-3">
+                {% for message in messages %}
+                    <li class="list-group-item list-group-item-warning">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
+    <h3 class="mt-5">Parking Slots</h3>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Slot ID</th>
+                <th>Vehicle Number</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for slot in parking_slots %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ slot[1] }}</td>
+                <td>Occupied</td>
+                <td>
+                    <a href="/remove/{{ slot[0] }}" class="btn btn-danger">Remove</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h3>Waiting Queue</h3>
+    <table class="table table-bordered">
+        <tbody>
+            {% for vehicle in waiting_queue %}
+            <tr>
+                <td>{{ vehicle[1] }}</td>
+                <td>
+                    <a href="/remove/{{ vehicle[0] }}" class="btn btn-danger">Remove</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>
